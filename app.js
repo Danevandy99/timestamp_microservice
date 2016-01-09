@@ -16,7 +16,6 @@ function handleRequest(port) {
                 case 'O':
                 case 'N':
                 case 'D':
-                    console.log(object.path.replace(/%20/g, ' '));
                     object.path = object.path.replace(/%20/g, ' ');
                     var jo = {};
                     jo.unix = parseInt(Date.parse(object.path));
@@ -24,12 +23,19 @@ function handleRequest(port) {
                     response.end(JSON.stringify(jo));
                     break;
                 default:
-                    console.log(object.path);
-                    var date = new Date(parseInt(object.path));
-                    var jo = {};
-                    jo.unix = parseInt(object.path);
-                    jo.natural = monthNames[date.getMonth()] + ' ' + date.getDate() + ", " + (date.getYear() + 1900);
-                    response.end(JSON.stringify(jo));
+                    if (object.path == '') {
+                        var jo = {};
+                        jo.unix = null;
+                        jo.natural = null;
+                        response.end(JSON.stringify(jo));
+                    } else {
+                        var date = new Date(parseInt(object.path));
+                        var jo = {};
+                        jo.unix = parseInt(object.path);
+                        jo.natural = monthNames[date.getMonth()] + ' ' + date.getDate() + ", " + (date.getYear() + 1900);
+                        response.end(JSON.stringify(jo));
+                    }
+                    
                     break;
             }
         }
